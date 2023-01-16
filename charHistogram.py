@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from collections import Counter
 
-# lista di lettere generate (di prova)
-SENTENCE = "AABBCCDDEEGGHHIIKKKKKKKKLMNO"
+SENTENCE = ""
 
 SENTENCE = sorted(SENTENCE)
 SENTENCE = ''.join(SENTENCE) # lista -> stringa
