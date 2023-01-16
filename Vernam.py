@@ -1,3 +1,4 @@
+# Coded by ScratchyCode
 from sense_hat import SenseHat
 from time import sleep
 import time
