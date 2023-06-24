@@ -6,7 +6,7 @@ quando si verificano le condizioni ambientali stocastiche come piccole variazion
 
 Viene cosi prodotta una sequenza casuale, dimostrabile attraverso l'istogramma frequenze si osservano solo distribuzioni uniformi sulle chiavi generate.
 
-# OTP
+# One-Time-Pad
 È il tentativo di implementare un cifrario a flusso di tipo OTP attraverso il fix delle falle crittografiche del noto RC4, cercando di far coesistere la sicurezza dei cifrari OTP alla praticità dei cifrari più moderni come AES.
 
 Un cifrario OTP è un cifrario perfetto perchè è matematicamente sicuro.
