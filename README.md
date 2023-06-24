@@ -4,7 +4,7 @@
 Quello che viene eseguito è un ciclo infinito per incrementare una variabile in un range fissato e leggere lo stato della variabile
 quando si verificano le condizioni ambientali stocastiche come piccole variazioni della pressione atmosferica.
 
-Viene cosi prodotta una sequenza casuale, dimostrabile attraverso l'istogramma frequenze si osservano solo distribuzioni uniformi sulle chiavi generate.
+Viene cosi prodotta una sequenza casuale, dimostrabile attraverso l'istogramma delle frequenze si osservano solo distribuzioni uniformi sulle chiavi generate.
 
 # One-Time-Pad
 È il tentativo di implementare un cifrario a flusso di tipo OTP attraverso il fix delle falle crittografiche del noto RC4, cercando di far coesistere la sicurezza dei cifrari OTP alla praticità dei cifrari più moderni come AES.
@@ -46,6 +46,6 @@ Viene anche appeso alla fine il contatore per garantire la sincronia e poter cor
 Viene anche impostato un tempo di delay casuale durante il processo di crittografia per mitigare attacchi di timing.
 
 # Crittoanalisi
-L'unica crittoanalisi nota è sulla password, punto in cui il cifrario è più vulnerabile ad attacchi di bruteforce per esempio, ritenuti mitigabili però attraverso la forza della password scelta come per altri cifrari ritenuti sicuri come AES.
+1) L'unica crittoanalisi nota è sulla password, punto in cui il cifrario è più vulnerabile ad attacchi di bruteforce per esempio, ritenuti mitigabili però attraverso la forza della password scelta come per altri cifrari ritenuti sicuri come AES. Si consiglia di usare il cifrario all'interno di adeguati standard e protocolli sulla gestione delle password.
 
-Si consiglia di usare il cifrario all'interno di adeguati standard e protocolli sulla gestione delle password.
+2) La crittografia negabile si ottiene trasformando il cifrario a flusso in un cifrario a blocchi per cui si contengano un numero di char in chiaro uguali a quelli usati dall'algoritmo di hashing crittografico usato, come per esempio sha512, e la derivazione di nuovi hash per ogni blocco di tsto in chiaro.
