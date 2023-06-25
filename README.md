@@ -20,7 +20,7 @@ Le condizioni sono:
 
 Il cifrario cosi definito resiste anche al bruteforce delle chiavi con potenza di calcolo infinita, perchè implementa il concetto di crittografia negabile, in quanto nel processo di crittoanalisi si estrarrebbero tutti i possibili testi di senso compiuto e non si potrebbe dire quale messaggio sia stato veramente scambiato.
 
-# sincVernam
+# sincVernam.py
 In sincVernam.py non si usa la matrice di Vigenere per la codifica ma l'operatore XOR per estendere l'alfabeto a tutti i char.
 
 Essendo il cifrario Vernam di difficile implementazione per l'onerosa gestione delle chiavi, si cerca di adottare dei compromessi.
@@ -49,3 +49,10 @@ Viene anche impostato un tempo di delay casuale durante il processo di crittogra
 1) L'unica crittoanalisi nota è sulla password, punto in cui il cifrario è più vulnerabile ad attacchi di bruteforce per esempio, ritenuti mitigabili però attraverso la forza della password scelta come per altri cifrari ritenuti sicuri come AES. Si consiglia di usare il cifrario all'interno di adeguati standard e protocolli sulla gestione delle password.
 
 2) La crittografia negabile si ottiene trasformando il cifrario a flusso in un cifrario a blocchi per cui si contengano un numero di char in chiaro uguali a quelli usati dall'algoritmo di hashing crittografico usato, come per esempio sha512, e la derivazione di nuovi hash per ogni blocco di tsto in chiaro.
+
+# OTP.py
+Il programma riprende la versione fixata di sincVernam.py ed aggiunge la possibilità di usare, oltre ad una password, un file di dati casuali come chiave crittografica, bypassando a derivazione delle chiavi generate con un generatore pseudocasuale.
+
+La generazione di chiavi pseudocasuali subentra nel momento in cui viene esaurito il file usato come chiave crittografica, perchè ad ogni byte di messaggio cifrato o decifrato corrisponde una riduzione di un byte del file chiave tramite il suo troncamento, evitandone il reimpiego e garantendo la sicurezza OTP. 
+
+L'uso sicuro richiede lo sviluppo di un protocollo ed un framework all'interno del quale avviene la gestione delle chiavi casuali e della sincronizzazione delle comunicazioni.
