@@ -41,9 +41,9 @@ Vengono quindi soddisfatte tutte le condizioni del cifrario Vernam:
 
 Inoltre viene calcolato un hash di integrità del messaggio ed appeso al testo cifrato.
 
-Viene anche appeso alla fine il contatore per garantire la sincronia e poter correggere errori di sincronizzazione nel caso in cui qualche messaggio venga perso. Il valore di questo contatore può essere pubblico svolgendo il ruolo logico di 'salt' crittografico per la derivazione di nuove password.
+Si potrebbe anche appendere alla fine del testo cifrato il contatore per garantire la sincronia e poter correggere errori di sincronizzazione nel caso in cui qualche messaggio venga perso. Il valore di questo contatore può essere pubblico svolgendo il ruolo logico di salt crittografico per la derivazione di nuove password.
 
-Viene anche impostato un tempo di delay casuale durante il processo di crittografia per mitigare attacchi di timing.
+Viene anche impostato un tempo di delay casuale di elaborazione dentro alle varie funzioni per mitigare attacchi di timing ed è aggiunto al messaggio in chiaro un timestamp con data e ora della cifratura per mitigare gli attacchi di replica.
 
 # Crittoanalisi
 1) L'unica crittoanalisi nota è sulla password, punto in cui il cifrario è più vulnerabile ad attacchi di bruteforce per esempio, ritenuti mitigabili però attraverso la forza della password scelta come per altri cifrari ritenuti sicuri come AES. Si consiglia di usare il cifrario all'interno di adeguati standard e protocolli sulla gestione delle password.
