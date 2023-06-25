@@ -1,5 +1,5 @@
 # Coded by Pietro Squilla
-# consente l'uso di file chiave oltre al normale uso dell'algoritmo sincVernam per una gestione differenziata delle chiavi
+# consente l'uso di file casuali come chiavi OTP oltre al normale uso dell'algoritmo sincVernam
 import hashlib
 import base64
 import getpass
@@ -21,25 +21,18 @@ def cifratura_vernam(messaggio, chiave):
 def genera_chiave(seed, lunghezza, contatore, file_chiavi=None):
     time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
     if file_chiavi and os.path.exists(file_chiavi):  # se il file esiste leggi la chiave da li, altrimenti genera la chiave dal seed
-        return leggi_e_tronca_chiave_da_file(file_chiavi, lunghezza, contatore)
+        return leggi_chiave_da_file(file_chiavi, lunghezza, contatore)
     else:
         informazioni = b"chiave cifratura OTP"
         hkdf = HKDF(algorithm=hashes.SHA512(), length=lunghezza, salt=None, info=informazioni)
         return hkdf.derive(seed)
 
-def leggi_e_tronca_chiave_da_file(file_name, lunghezza, contatore):
-    with open(file_name, 'rb+') as f:
+def leggi_chiave_da_file(file_name, lunghezza, contatore):
+    with open(file_name, 'rb') as f:
         f.seek(contatore)  # sposta il puntatore del file
         chiave = f.read(lunghezza)
         if len(chiave) != lunghezza:  # se non ci sono abbastanza byte, solleva un'eccezione
             raise ValueError("Tutti i byte nel file sono stati utilizzati.")
-        
-        # tronca i byte utilizzati per garantire l'OTP
-        resto = f.read()
-        f.seek(contatore)  # sposta il puntatore del file di nuovo all'inizio dei byte non utilizzati
-        f.write(resto)
-        f.truncate()
-    
     return chiave
 
 def calcola_hmac(chiave, messaggio):
@@ -54,10 +47,19 @@ def hash_password(password, contatore):
     hashed = hashlib.sha256(password_contatore.encode()).hexdigest()
     return hashed
 
+def aggiorna_contatore(contatore):
+    with open('contatore.txt', 'w') as f:
+        f.write(str(contatore))
+
 def main():
-    contatore = 0
+    try:
+        with open('contatore.txt', 'r') as f:
+            contatore = int(f.read())
+    except FileNotFoundError:
+        contatore = 0
+
     password = getpass.getpass("Password iniziale: ")
-    file_chiavi = input("Inserisci il nome del file chiave (lascia vuoto per derivare la chiave dalla password): ")
+    file_chiavi = input("File chiave OTP (lascia vuoto per derivare la chiave dalla password): ")
     
     while True:
         try:
@@ -81,6 +83,7 @@ def main():
                 
                 print("Messaggio cifrato:", messaggio_cifrato_base64.decode())
                 contatore += len(chiave)
+                aggiorna_contatore(contatore)
                 print(f"\n{len(chiave)} byte del file chiave sono stati utilizzati.")
             
             elif scelta.upper() == 'D':
@@ -108,10 +111,13 @@ def main():
                 print("\nTimestamp:", timestamp)
                 print("Messaggio decifrato:", messaggio_decifrato)
                 contatore += len(chiave)
+                aggiorna_contatore(contatore)
                 print(f"\n{len(chiave)} byte del file chiave sono stati utilizzati.")
             
             elif scelta.upper() == 'S':
-                contatore = int(input("Inserisci il pin di sincronizzazione: "))
+                scarto = int(input("Inserisci il pin di sincronizzazione: "))
+                contatore += scarto
+                aggiorna_contatore(contatore)
                 print("Sincronizzazione eseguita.")
             
             elif scelta.upper() == 'X':
