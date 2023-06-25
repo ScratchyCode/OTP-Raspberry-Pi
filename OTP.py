@@ -1,5 +1,5 @@
 # Coded by Pietro Squilla
-# consente l'uso di file casuali come chiavi OTP oltre al normale uso dell'algoritmo sincVernam
+# consente l'uso di file chiave oltre al normale uso dell'algoritmo sincVernam per una gestione differenziata delle chiavi
 import hashlib
 import base64
 import getpass
@@ -18,28 +18,29 @@ def cifratura_vernam(messaggio, chiave):
     time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
     return bytes(a ^ b for a, b in zip(messaggio, chiave))
 
-def leggi_e_tronca_chiave_da_file(file_name, lunghezza):
+def genera_chiave(seed, lunghezza, contatore, file_chiavi=None):
+    time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
+    if file_chiavi and os.path.exists(file_chiavi):  # se il file esiste leggi la chiave da li, altrimenti genera la chiave dal seed
+        return leggi_e_tronca_chiave_da_file(file_chiavi, lunghezza, contatore)
+    else:
+        informazioni = b"chiave cifratura OTP"
+        hkdf = HKDF(algorithm=hashes.SHA512(), length=lunghezza, salt=None, info=informazioni)
+        return hkdf.derive(seed)
+
+def leggi_e_tronca_chiave_da_file(file_name, lunghezza, contatore):
     with open(file_name, 'rb+') as f:
+        f.seek(contatore)  # sposta il puntatore del file
         chiave = f.read(lunghezza)
         if len(chiave) != lunghezza:  # se non ci sono abbastanza byte, solleva un'eccezione
             raise ValueError("Tutti i byte nel file sono stati utilizzati.")
         
         # tronca i byte utilizzati per garantire l'OTP
         resto = f.read()
-        f.seek(0)
+        f.seek(contatore)  # sposta il puntatore del file di nuovo all'inizio dei byte non utilizzati
         f.write(resto)
         f.truncate()
     
     return chiave
-
-def genera_chiave(seed, lunghezza, file_chiavi=None):
-    time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
-    if file_chiavi and os.path.exists(file_chiavi):  # se il file esiste leggi la chiave da li, altrimenti genera la chiave dal seed
-        return leggi_e_tronca_chiave_da_file(file_chiavi, lunghezza)
-    else:
-        informazioni = b"chiave cifratura OTP"
-        hkdf = HKDF(algorithm=hashes.SHA512(), length=lunghezza, salt=None, info=informazioni)
-        return hkdf.derive(seed)
 
 def calcola_hmac(chiave, messaggio):
     time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
@@ -72,7 +73,7 @@ def main():
                 time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
                 password_agg = hash_password(password, contatore)
                 seed = seed_da_stringa(password_agg)
-                chiave = genera_chiave(seed, len(messaggio), file_chiavi)
+                chiave = genera_chiave(seed, len(messaggio), contatore, file_chiavi)
                 
                 hmac_messaggio = calcola_hmac(chiave, messaggio_originale)
                 messaggio_cifrato = cifratura_vernam(messaggio, chiave)
@@ -91,7 +92,7 @@ def main():
                 time.sleep(random.uniform(0.01, 0.5))  # ritardo casuale
                 password_agg = hash_password(password, contatore)
                 seed = seed_da_stringa(password_agg)
-                chiave = genera_chiave(seed, len(messaggio_cifrato), file_chiavi)
+                chiave = genera_chiave(seed, len(messaggio_cifrato), contatore, file_chiavi)
                 
                 messaggio = cifratura_vernam(messaggio_cifrato, chiave)
                 messaggio_originale = base64.b64decode(messaggio)
@@ -124,4 +125,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
