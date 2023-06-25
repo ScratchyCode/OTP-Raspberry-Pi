@@ -23,7 +23,7 @@ def genera_chiave(seed, lunghezza, contatore, file_chiavi=None):
     if file_chiavi and os.path.exists(file_chiavi):  # se il file esiste leggi la chiave da li, altrimenti genera la chiave dal seed
         return leggi_chiave_da_file(file_chiavi, lunghezza, contatore)
     else:
-        informazioni = b"chiave cifratura OTP"
+        informazioni = b"chiave OTP derivata"
         hkdf = HKDF(algorithm=hashes.SHA512(), length=lunghezza, salt=None, info=informazioni)
         return hkdf.derive(seed)
 
@@ -105,9 +105,9 @@ def main():
                 if hmac_ricevuto != hmac_calcolato:
                     raise ValueError("L'integrità del messaggio è stata compromessa!")
                 
-                parts = messaggio_originale.decode().split(' ', 2)
-                timestamp = parts[0] + ' ' + parts[1]
-                messaggio_decifrato = parts[2]
+                parti = messaggio_originale.decode().split(' ', 2)
+                timestamp = parti[0] + ' ' + parti[1]
+                messaggio_decifrato = parti[2]
                 print("\nTimestamp:", timestamp)
                 print("Messaggio decifrato:", messaggio_decifrato)
                 contatore += len(chiave)
