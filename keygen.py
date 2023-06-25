@@ -9,6 +9,10 @@ sense = SenseHat()
 minimo = 65
 massimo = 90
 
+# uso con il programma OTP.py
+# minimo = 0
+# massimo = 255
+
 # inizializzo una variabile contatore
 contatore = minimo
 
