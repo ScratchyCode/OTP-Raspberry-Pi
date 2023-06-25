@@ -48,7 +48,7 @@ Viene anche impostato un tempo di delay casuale di elaborazione dentro alle vari
 # Crittoanalisi
 1) L'unica crittoanalisi nota è sulla password, punto in cui il cifrario è più vulnerabile ad attacchi di bruteforce per esempio, ritenuti mitigabili però attraverso la forza della password scelta come per altri cifrari ritenuti sicuri come AES. Si consiglia di usare il cifrario all'interno di adeguati standard e protocolli sulla gestione delle password.
 
-2) La crittografia negabile si ottiene trasformando il cifrario a flusso in un cifrario a blocchi per cui si contengano un numero di char in chiaro uguali a quelli usati dall'algoritmo di hashing crittografico usato, come per esempio sha512, e la derivazione di nuovi hash per ogni blocco di tsto in chiaro.
+2) La crittografia negabile si ottiene trasformando il cifrario a flusso in un cifrario a blocchi che contengano un numero di char in chiaro uguali a quelli del digest dell'algoritmo di hashing crittografico usato, come per esempio sha512, e la derivazione di nuovi hash per ogni blocco di testo in chiaro.
 
 # OTP.py
 Il programma riprende la versione fixata di sincVernam.py ed aggiunge la possibilità di usare, oltre ad una password, un file di dati casuali come chiave crittografica, bypassando a derivazione delle chiavi generate con un generatore pseudocasuale.
